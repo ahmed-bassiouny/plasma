@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:plasma/contactUs.dart';
 import 'package:plasma/info.dart';
 import 'package:plasma/people.dart';
 import 'package:plasma/register.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         accentColor: const Color(0xFF2196f3),
         canvasColor: const Color(0xFFfafafa),
       ),
-      home: new PeopleScreen(),
+      home: new MyHomePage(),
     );
   }
 }
@@ -88,7 +89,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       )),
                   space(),
                   FlatButton.icon(
-                      onPressed: null,
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RegisterScreen()),
+                        );
+                      },
                       icon: Icon(
                         Icons.check_box,
                         color: Colors.white,
@@ -106,12 +112,17 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: TextStyle(color: Colors.white, fontSize: 20))),
                   space(),
                   FlatButton.icon(
-                      onPressed: null,
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ContactUsScreen()),
+                        );
+                      },
                       icon: Icon(
-                        Icons.info,
+                        Icons.contact_phone,
                         color: Colors.white,
                       ),
-                      label: Text("الشكاوى",
+                      label: Text("التواصل معنا",
                           style: TextStyle(color: Colors.white, fontSize: 20))),
                 ],
               ),
