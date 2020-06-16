@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:loadmore/loadmore.dart';
+import 'package:plasma/api.dart';
+import 'package:plasma/user.dart';
 import 'package:plasma/utils.dart';
 
 class PeopleScreen extends StatefulWidget {
@@ -7,8 +10,28 @@ class PeopleScreen extends StatefulWidget {
 }
 
 class _PeopleScreenState extends State<PeopleScreen> {
-  var selectIndex = -1;
+  var bloodTypeIndex = -1;
+  var _selectedCityIndex = -1;
   String _selectedCity = "";
+  var isFinished = true;
+  var list = List<User>();
+  var page = 1;
+
+  initState() {
+    super.initState();
+    page = 1;
+    fetchData();
+  }
+
+  fetchData() async {
+    var res = await Api.search(_selectedCityIndex, bloodTypeIndex,page);
+    if (res.success) {
+      setState(() {
+        list.addAll(res.data.items);
+        isFinished = (res.data.pagination.next_page_url == null || res.data.pagination.next_page_url.isEmpty);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +54,10 @@ class _PeopleScreenState extends State<PeopleScreen> {
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectIndex = selectIndex == index ? -1 : index;
+                        bloodTypeIndex = bloodTypeIndex == index ? -1 : index;
+                        list = List<User>();
+                        page = 1;
+                        fetchData();
                       });
                     },
                     child: new Container(
@@ -43,7 +69,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5.0)),
                         // You can use like this way or like the below line
                         //borderRadius: new BorderRadius.circular(30.0),
-                        color: index == selectIndex ? color : Colors.grey,
+                        color: index == bloodTypeIndex ? color : Colors.grey,
                       ),
                       child: Center(
                           child: Text(
@@ -76,32 +102,54 @@ class _PeopleScreenState extends State<PeopleScreen> {
                 onChanged: (value) {
                   setState(() {
                     _selectedCity = value;
+                    _selectedCityIndex = cities.indexOf(value);
+                    list = List<User>();
+                    page = 1;
+                    fetchData();
                   });
                 },
               ),
             ),
-            ListView.builder(
-                itemCount: 5,
-                shrinkWrap: true,
-                primary: false,
-                itemBuilder: (ctx, index) {
-                  return ListTile(
-                    title: Text("ahmed bassiouny"),
-                    subtitle: Text("01273144337"),
-                    leading: CircleAvatar(
-                      child: Text(
-                        bloodType[index],
-                        style: TextStyle(color: Colors.white),
+            LoadMore(
+              isFinish: isFinished,
+              textBuilder: (f){
+                if(f == LoadMoreStatus.nomore && page != 1){
+
+                  return "";
+                }else{
+                  page ++;
+                  return "جارى التحميل";
+                }
+              },
+              onLoadMore: () async{
+                fetchData();
+                return isFinished;
+              },
+              child: ListView.builder(
+                  itemCount: list.length,
+                  shrinkWrap: true,
+                  primary: false,
+                  itemBuilder: (ctx, index) {
+                    return ListTile(
+                      title: Text(list[index].name),
+                      subtitle: Text(list[index].phone),
+                      leading: CircleAvatar(
+                        child: Text(
+                          bloodType[list[index].bloodType],
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: color,
                       ),
-                      backgroundColor: color,
-                    ),
-                    trailing: Text(
-                      index % 2 == 0 ? "مجانى" : "مدفوع",
-                      style: TextStyle(
-                          color: index % 2 == 0 ? Colors.green : Colors.black),
-                    ),
-                  );
-                }),
+                      trailing: Text(
+                        list[index].free ? "مجانى" : "مدفوع",
+                        style: TextStyle(
+                            color: list[index].free ? Colors.green : Colors
+                                .black),
+                      ),
+                    );
+                  }),
+            ),
+
           ],
         ),
       ),

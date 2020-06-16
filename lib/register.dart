@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:plasma/api.dart';
 import 'package:plasma/user.dart';
 import 'package:plasma/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,11 +40,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (values != null && values.isNotEmpty) {
       user = User.fromJson(json.decode(values));
-      print(user);
       _selectedCity = cities[user.city];
       _bloodType = bloodType[user.bloodType];
       free = user.free;
       avaiable = user.available;
+      print(user.id);
+      print(user.toJson().toString());
     } else {
       user = User();
     }
@@ -57,11 +59,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() {
       loading = true;
     });
+    var res = BaseResponse<User>();
+    if (user.id == 0) {
+      res = await Api.createUser(user);
+    } else {
+      res = await Api.editUser(user);
+    }
+
+    if (res.success) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      print(res.data.id);
+      prefs.setString("user", json.encode(res.data.toJson()));
+      Navigator.of(context).pop();
+      toasty("تم الحفظ بنجاح", Colors.green);
+    } else {
+      toasty(res.errors[0] == null ? " حدث خطا ما" : res.errors[0].toString(), Colors.red);
+    }
+
     //
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("user", json.encode(user.toJson()));
-    Navigator.of(context).pop();
-    toasty("تم الحفظ بنجاح", Colors.green);
   }
 
   toasty(String txt,Color color){

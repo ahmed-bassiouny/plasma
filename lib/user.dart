@@ -17,7 +17,7 @@ class User{
         city = json["city_index"] == null ? -1 : json["city_index"],
         bloodType = json["blood_specie_index"] == null ? -1 : json["blood_specie_index"],
         free = json["free_donation"],
-        note = json["note"] == null ? "" : json["note"],
+        note = json["notes"] == null ? "" : json["notes"],
         available = json["available"];
 
   static List fromList(List list) {
@@ -29,7 +29,8 @@ class User{
   Map<String, dynamic> toJson() => {
     "full_name": name,
     "phone": phone,
-    "note": note,
+    "notes": note,
+    "id":id,
     "city_index":city,
     "blood_specie_index":bloodType,
     "free_donation":free,

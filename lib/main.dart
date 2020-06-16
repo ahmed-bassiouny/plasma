@@ -78,7 +78,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   FlatButton.icon(
-                      onPressed: null,
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PeopleScreen()),
+                        );
+                      },
                       icon: Icon(
                         Icons.search,
                         color: Colors.white,
