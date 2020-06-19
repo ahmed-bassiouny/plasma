@@ -15,15 +15,17 @@ class _PeopleScreenState extends State<PeopleScreen> {
   String _selectedCity = "";
   var isFinished = true;
   var list = List<User>();
-  var page = 1;
+  var page = 0;
 
   initState() {
     super.initState();
-    page = 1;
+    page = 0;
     fetchData();
   }
 
-  fetchData() async {
+  Future<bool> fetchData() async {
+    page++;
+    print(page);
     var res = await Api.search(_selectedCityIndex, bloodTypeIndex,page);
     if (res.success) {
       setState(() {
@@ -31,10 +33,13 @@ class _PeopleScreenState extends State<PeopleScreen> {
         isFinished = (res.data.pagination.next_page_url == null || res.data.pagination.next_page_url.isEmpty);
       });
     }
+    return (res.data.pagination.next_page_url == null || res.data.pagination.next_page_url.isEmpty);
   }
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text("جميع المتبرعين"),
@@ -56,7 +61,8 @@ class _PeopleScreenState extends State<PeopleScreen> {
                       setState(() {
                         bloodTypeIndex = bloodTypeIndex == index ? -1 : index;
                         list = List<User>();
-                        page = 1;
+                        page = 0;
+                        isFinished = true;
                         fetchData();
                       });
                     },
@@ -104,7 +110,8 @@ class _PeopleScreenState extends State<PeopleScreen> {
                     _selectedCity = value;
                     _selectedCityIndex = cities.indexOf(value);
                     list = List<User>();
-                    page = 1;
+                    page = 0;
+                    isFinished = true;
                     fetchData();
                   });
                 },
@@ -113,18 +120,11 @@ class _PeopleScreenState extends State<PeopleScreen> {
             LoadMore(
               isFinish: isFinished,
               textBuilder: (f){
-                if(f == LoadMoreStatus.nomore && page != 1){
-
-                  return "";
-                }else{
-                  page ++;
-                  return "جارى التحميل";
-                }
+                print(page);
+                print(f);
+                return page == 1 ? "جارى التحميل" : "";
               },
-              onLoadMore: () async{
-                fetchData();
-                return isFinished;
-              },
+              onLoadMore: fetchData,
               child: ListView.builder(
                   itemCount: list.length,
                   shrinkWrap: true,

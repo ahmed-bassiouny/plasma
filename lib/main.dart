@@ -108,7 +108,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: TextStyle(color: Colors.white, fontSize: 20))),
                   space(),
                   FlatButton.icon(
-                      onPressed: null,
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => InfoScreen()),
+                        );
+                      },
                       icon: Icon(
                         Icons.help,
                         color: Colors.white,
