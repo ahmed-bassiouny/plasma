@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         Locale("ar", "AE"),
       ],
       locale: Locale("ar", "AE"),
-      title: 'Generated App',
+      title: 'بلازما كوفيد19',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: const Color(0xFF2196f3),
