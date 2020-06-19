@@ -34,7 +34,7 @@ class InfoScreen extends StatelessWidget {
                   ),
                   Flexible(
                     child: Text(
-                      " تأكد من أنك تتبرع بالبلازما فى مركز معتمد.",
+                      "للتواصل مع خدمات نقل الدم القومية يرجى الإتصال على 15366.",
                       style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                   )
@@ -60,7 +60,7 @@ class InfoScreen extends StatelessWidget {
                   ),
                   Flexible(
                     child: Text(
-                      " مراقبة عدد المرات التي تتبرع بها: يمكنك التبرع بالبلازما كل 28 يوما، وتصل إلى 13 مرة في السنة، وتستغرق العملية بأكملها حوالي ساعة و15 دقيقة.",
+                      " تأكد من أنك تتبرع بالبلازما فى مركز معتمد.",
                       style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                   )
@@ -80,6 +80,32 @@ class InfoScreen extends StatelessWidget {
                     ),
                     child: Text(
                       "3",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  Flexible(
+                    child: Text(
+                      " مراقبة عدد المرات التي تتبرع بها: يمكنك التبرع بالبلازما كل 28 يوما، وتصل إلى 13 مرة في السنة، وتستغرق العملية بأكملها حوالي ساعة و15 دقيقة.",
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                  )
+                ],
+              ),
+              Divider(),
+              SizedBox(height: 20,),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 80,
+                    decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      // You can use like this way or like the below line
+                      //borderRadius: new BorderRadius.circular(30.0),
+                      color: color,
+                    ),
+                    child: Text(
+                      "4",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white),
                     ),
